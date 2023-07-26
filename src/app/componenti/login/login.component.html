@@ -1,0 +1,28 @@
+<!--<form #loginform = "ngForm" (ngSubmit)="onSubmit(loginform)">
+    <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput name="username" ngModel required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input type="password" matInput name="password" ngModel required>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!loginform.valid">Login</button>
+</form>-->
+
+
+<form class="col_center" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <h1>Accedi</h1>
+  <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput name="email" formControlName="email">
+    </mat-form-field>
+    <div style="color:orangered" *ngIf="!loginForm.get('username')?.valid && loginForm.get('username')?.touched"><p>Inserisci il tuo soprannome</p></div>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input type="password" matInput name="password" formControlName="password">
+    </mat-form-field>
+    <div style="color:orangered" *ngIf="!loginForm.get('password')?.valid && loginForm.get('password')?.touched"><p>Inserisci la tua password</p></div>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
+    <span>Sei nuovo? <a routerLink="../register">Registrati</a></span>
+</form>
