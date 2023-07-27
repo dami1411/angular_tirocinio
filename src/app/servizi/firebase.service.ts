@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
 
-  constructor(private httpService:HttpClient) { }
+  constructor(private httpService: HttpClient) { }
   url = 'https://angularpractice-5650a-default-rtdb.firebaseio.com';
   //authToken!:string;
   //urlForDelete = 'https://angularpractice-5650a-default-rtdb.firebaseio.com/utenti';
@@ -17,13 +18,13 @@ export class FirebaseService {
   addTableToUrl(tabella: string) {
     return `/${tabella}`;
   }
-  
-  addAuthToUrl(token: string = ''){
+
+  addAuthToUrl(token: string = '') {
     let idToken = token || JSON.parse(sessionStorage.getItem('user') || '{}').idToken
     return `.json?auth=${idToken}`;
   }
 
-  addIdToUrl(id:string) {
+  addIdToUrl(id: string) {
     return `/${id}`;
   }
   /*getAuthToken(authToken:string){
@@ -32,26 +33,35 @@ export class FirebaseService {
   /*getUrlForDelete() {
     return this.urlForDelete;
   }*/
-  insertUtente(idToken:string, body:{}){
+  insertUtente(idToken: string, body: {}) {
     let url = this.url;
     console.log(url);
     url += this.addTableToUrl('utenti');
     url += this.addAuthToUrl(idToken);
-    return this.httpService.post(url,body);
+    return this.httpService.post(url, body);
   }
 
-  getUtenti(){
-      let url = this.url;
-      console.log(url);
-      url += this.addTableToUrl('utenti');
-      url += this.addAuthToUrl();
-      console.log(url);
-      return this.httpService.get(url);
+  getUtenti() {
+    let url = this.url;
+    console.log(url);
+    url += this.addTableToUrl('utenti');
+    url += this.addAuthToUrl(JSON.parse(sessionStorage.getItem('user') || '{}').idToken);
+    console.log(url);
+    return this.httpService.get(url);
   }
+
+
+  /*getRoleById(id:string): Observable<string> {
+    return this.getUtenteByEmail().pipe(map((data:any)=>{
+      return data.role || 'guest';
+    }))
+    
+  }*/
+
 
   deleteUtente(id: string) {
     //this.setAuthUrl();
-    console.log(this.url+"/"+id);
+    console.log(this.url + "/" + id);
     let url = this.url;
     url += this.addTableToUrl('utenti');
     url += this.addIdToUrl(id);
@@ -60,14 +70,42 @@ export class FirebaseService {
     //return this.httpService.delete(`${this.url}/${id}.json?auth=${JSON.parse(sessionStorage.getItem('user') || "{}").idToken}`);
     return this.httpService.delete(url);
   }
-  
-  editUtente(id:string, body: {}) {
+
+  editUtente(id: string, body: {}) {
     //return this.httpService.patch(`${this.url}/${id}.json?auth=${JSON.parse(sessionStorage.getItem('user') || "{}").idToken}`,body);
     let url = this.url;
     url += this.addTableToUrl('utenti');
     url += this.addIdToUrl(id);
     url += this.addAuthToUrl();
     console.log(url);
-    return this.httpService.patch(url,body);
-  } 
+    return this.httpService.patch(url, body);
+  }
+  
+  getRoleByEmail(email: any) : Observable<string> {
+    return !!email ? this.getUserByEmail(email).pipe(map(user => user?.role || 'guest')) : of('no-user')
+  }
+
+  getUsernameByEmail(email: any) : Observable<string> {
+    return this.getUserByEmail(email).pipe(map(user => user.username));
+  }
+
+  getUserByEmail(email: string): Observable<any> {
+    /*let url = this.url;
+    url += this.addTableToUrl('utenti');
+    url += this.addIdToUrl(id);
+    url += this.addAuthToUrl();
+    console.log(url);
+    return this.httpService.get(url);*/
+    return this.getUtenti().pipe(map((data: any) => {
+
+      let id_user = Object.keys(data)
+        .find(id => {
+          return data[id].email === email
+        });
+
+      return id_user ? data[id_user] : undefined;
+
+    }));
+
+  }
 }

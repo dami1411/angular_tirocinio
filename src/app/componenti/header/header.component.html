@@ -1,7 +1,9 @@
 <mat-toolbar>
-    <span>My Application</span>
-    <span class="example-spacer"></span>
-    <button (click)="onLogOut()" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-      <mat-icon *ngIf="logged">logout</mat-icon>
-    </button>
-  </mat-toolbar>
+  <span>My Application</span>
+  <span class="example-spacer"></span>
+  <span>{{username}}</span>
+  <button (click)="onLogOut()" mat-icon-button class="example-icon favorite-icon"
+    aria-label="Example icon-button with heart icon" *ngIf="logged">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>

@@ -17,16 +17,19 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  
+
   //url!: string;
   //@ViewChild('tabella') tabella:any;
 
-  utenti:Utenti[] = [];
+  utenti: Utenti[] = [];
   dataSource = new MatTableDataSource([]);
-  userForm!:FormGroup;
+  userForm!: FormGroup;
   //showForm = false;
   utente!: Utenti;
-  editButton:any;
+  editButton: any;
+  role!: string;
+  //username!: string;
+  //type!:string
   //showInput=false
   /*element_data : {position: number, name:string, weight: number, symbol:string}[] = [
     {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
@@ -40,78 +43,106 @@ export class HomeComponent implements OnInit {
     {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
     {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
   ];*/
-  displayColumns=['id','username','email','password','actions','deleteAction']; 
+  adminActions = ['deleteAction','changeRole'];
+  //displayColumns = ['id', 'username', 'email', 'password', 'editAction', 'deleteAction', 'role'];
+  displayColumns = ['id', 'username', 'email', 'password','role','editAction'];
   utenteLoggato = JSON.parse(sessionStorage.getItem('user') || "{}");
-  constructor(private firebase:FirebaseService,public dialogEdit:MatDialog, public dialogDelete:MatDialog,private authService:AuthService){}
-  
+  constructor(private firebase: FirebaseService, public dialogEdit: MatDialog, public dialogDelete: MatDialog, private authService: AuthService) { }
+
   ngOnInit(): void {
-     
+
     //this.router.navigate(['/login']);
     //this.url = this.firebase.getUrl();
     this.authService.checkSession();
-    this.firebase.getUtenti( ).subscribe((data:any)=>{
-        Object.keys(data).map((key)=> {
-        data[key].id = key;   
-        this.utenti.push({id:data[key].id,username:data[key].username,email:data[key].email,password:data[key].password});        
-        this.dataSource.data = Object.values(data);
-          
-     })
+    this.getUsers();
+    this.firebase.getRoleByEmail(JSON.parse(sessionStorage.getItem('user') || '{}').email).subscribe((role) => {
+      this.role = role;
+      console.log(role);
+    /*this.firebase.getUsernameByEmail(JSON.parse(sessionStorage.getItem('user') || '{}').email).subscribe((username) =>{
+      this.username = username;
+      console.log(username);
+     
+    })*/ 
       
-   });
-   this.userForm = new FormGroup({
-    username : new FormControl(null, [Validators.required]),
-    email: new FormControl(null, [Validators.required]),
-    password: new FormControl(null,[Validators.required,Validators.minLength(8)])
-   });
+      if (this.role === 'admin')
+          for(let action of this.adminActions)
+            this.displayColumns.push(action);  
+    });
+    this.userForm = new FormGroup({
+      username: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.required]),
+      password: new FormControl(null, [Validators.required, Validators.minLength(8)])
+    });
 
   }
-  onClickDelete(user:Utenti){
-     this.openDialogDelete('500','500',user);
+  getUsers() {
+    this.firebase.getUtenti().subscribe((data: any) => {
+      Object.keys(data).map((key) => {
+        data[key].id = key;
+        this.utenti.push({ id: data[key].id, username: data[key].username, email: data[key].email, password: data[key].password, role: 'normal' });
+        this.dataSource.data = Object.values(data);
+      });          
+    });
+   }
+  onClickDelete(user: Utenti) {
+    this.openDialogDelete('500', '500', user);
     //this.url = this.firebase.getUrlForDelete();
-    
+
   }
 
-  openDialogDelete(enterAnimationDuration:string,exitAnimationDuration:string,user:Utenti) {
+  openDialogDelete(enterAnimationDuration: string, exitAnimationDuration: string, user: Utenti) {
     this.dialogDelete.open(DeleteDialogComponent, {
       data: user,
       width: '400px',
       enterAnimationDuration,
-      exitAnimationDuration    
+      exitAnimationDuration
+    }).afterClosed().subscribe(_ => {
+      this.getUsers();
     });
   }
-  openDialogEdit(enterAnimationDuration:string,exitAnimationDuration:string,user:Utenti):void{
-    this.dialogEdit.open(EditDialogComponent,{
-      data: user,
+  openDialogEdit(enterAnimationDuration: string, exitAnimationDuration: string, user: Utenti, tipo: string): void {
+    //this.type = tipo;
+    this.dialogEdit.open(EditDialogComponent, {
+      data: { utente: user, type: tipo },
       width: '400px',
       enterAnimationDuration,
       exitAnimationDuration,
+    }).afterClosed().subscribe(_ => {
+      this.getUsers();
     });
   }
-  onClickEdit(user: Utenti,event:Event){
+  onClickEdit(user: Utenti, type: string) {
     //console.log(event);
     //console.log(this.tabella);
     //this.showInput!=this.showInput;
-   //(<HTMLButtonElement>event.currentTarget).disabled = true;
-    console.log(event.currentTarget);
-    this.openDialogEdit('500','500',user);
+    //(<HTMLButtonElement>event.currentTarget).disabled = true;
+    //console.log(event.currentTarget);
+    this.openDialogEdit('500', '500', user, type);
     //this.showForm = true;
     this.userForm.get('username')?.setValue(user.username);
     this.userForm.get('email')?.setValue(user.email);
     this.userForm.get('password')?.setValue(user.password);
-    this.utente = user;
+    this.utente = user;   
   }
-  onClickRow(row:any){
+  onClickAdd(user: Utenti, type: string) {
+    this.openDialogEdit('500', '500', user, type);
+  }
+  onClickChangeRole(user:Utenti, type: string) {
+    this.openDialogEdit('500','500', user, type);
+  }
+  onClickRow(row: any) {
     console.log(row);
   }
-  onSubmitEdit(){
-      //this.url= this.firebase.getUrlForDelete();
-      this.firebase.editUtente( this.utente.id, {
-        username: this.userForm.get('username')?.value,
-        email: this.userForm.get('email')?.value,
-        password: this.userForm.get('password')?.value
-      }).subscribe((data)=>{
-        console.log(data);
-      })
-      //this.showForm = false;
+  onSubmitEdit() {
+    //this.url= this.firebase.getUrlForDelete();
+    this.firebase.editUtente(this.utente.id, {
+      username: this.userForm.get('username')?.value,
+      email: this.userForm.get('email')?.value,
+      password: this.userForm.get('password')?.value,
+      role: this.userForm.get('role')?.value
+    }).subscribe((data) => {
+      console.log(data);
+    })
+    //this.showForm = false;
   }
 }

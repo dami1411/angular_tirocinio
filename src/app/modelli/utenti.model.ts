@@ -22,6 +22,7 @@ export interface Utenti{
     id:string,
     username:string,
     email:string,
-    password:string
+    password:string,
+    role: string
 }
 

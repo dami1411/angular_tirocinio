@@ -1,17 +1,24 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmitEdit()" class="col_center">
-    <h2>Edit</h2>
-    <mat-form-field>
-        <mat-label>Username</mat-label>
-        <input matInput  name="username" formControlName="username">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input matInput  name="username" formControlName="email">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Password</mat-label>
-        <input matInput type="password" name="password" formControlName="password">
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" [disabled]="!userForm.valid">change</button>
-      <!--<button mat-raised-button color="warn" (click)="showForm = false">undo</button>-->
+  <h2>{{data.type}}</h2>
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input matInput name="username" formControlName="username">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput name="username" formControlName="email">
+  </mat-form-field>
+  <mat-form-field>  
+    <mat-label>Password</mat-label>
+    <input matInput type="password" name="password" formControlName="password">
+  </mat-form-field>
+  <!--<mat-label>Select role</mat-label>-->
+  <mat-form-field name="role" *ngIf="data.type.toLowerCase() === 'changeRole'.toLowerCase() || data.type.toLowerCase() === 'add'.toLowerCase()">
+    <mat-select formControlName="role" value="{{roles[0]}}" (selectionChange)="selectedRole=($event.value)">
+      <mat-option *ngFor="let r of roles;" value="{{r}}">{{r}}</mat-option>
+      <!--<mat-option value="two">Second option</mat-option>-->
+   </mat-select>
+  </mat-form-field> 
+  <button mat-raised-button color="primary" type="submit" [disabled]="!userForm.valid">{{data.type}}</button>
+  <!--<button mat-raised-button color="warn" (click)="showForm = false">undo</button>-->
 </form>

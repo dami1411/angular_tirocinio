@@ -8,18 +8,18 @@ import { FirebaseService } from 'src/app/servizi/firebase.service';
   styleUrls: ['./delete-dialog.component.css']
 })
 export class DeleteDialogComponent implements OnInit {
-  constructor(private firebase:FirebaseService,@Inject(MAT_DIALOG_DATA)public data:any,public dialogRef:MatDialogRef<DeleteDialogComponent>){}
+  constructor(private firebase: FirebaseService, @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<DeleteDialogComponent>) { }
 
   ngOnInit(): void {
-    
+
   }
 
-  onDelete(){
-    this.firebase.deleteUtente(this.data.id).subscribe((data)=>{
+  onDelete() {
+    this.firebase.deleteUtente(this.data.id).subscribe((data) => {
       console.log(data);
     });
   }
-  onClose(){
+  onClose() {
     this.dialogRef.close();
   }
 }

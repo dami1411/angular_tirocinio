@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class AuthService {
     this.router.navigate(['/login']);
   } 
   checkSession(){
-    if(sessionStorage.getItem('user') === '{}' || new Date() > JSON.parse(sessionStorage.getItem('user') || '{}').expirationDate ) {
+    if(sessionStorage.getItem('user') === '{}' || new Date() > new Date(JSON.parse(sessionStorage.getItem('user') || '{}').expirationDate) ) {
         console.log("token scaduto");
         this.logOut();
     }

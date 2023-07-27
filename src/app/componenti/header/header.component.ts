@@ -9,14 +9,17 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class HeaderComponent implements OnInit {
   logged = false;
-  constructor(private authService:AuthService,private router:Router) {}
+  username!:string;
+  constructor(private authService: AuthService, private router: Router) { }
   ngOnInit(): void {
-   //this.logged = sessionStorage.getItem('user')!= undefined;
-   this.logged = this.authService.isAuthenticated();
+    //this.logged = sessionStorage.getItem('user')!= undefined;
+    this.logged = this.authService.isAuthenticated();
+    this.username = JSON.parse(sessionStorage.getItem('user') || '{}').username;
+    console.log(this.username);
   }
-  onLogOut(){
+  onLogOut() {
+    this.logged = false;
+    this.username ='';
     this.authService.logOut();
-    
-  }  
+  }
 }
- 
