@@ -21,7 +21,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
-
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
  
 
 import { ReactiveFormsModule } from '@angular/forms';
@@ -30,6 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { EditDialogComponent } from './componenti/edit-dialog/edit-dialog.component';
 import { DeleteDialogComponent } from './componenti/delete-dialog/delete-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -41,7 +42,6 @@ import { DeleteDialogComponent } from './componenti/delete-dialog/delete-dialog.
     RegisterComponent,
     EditDialogComponent,
     DeleteDialogComponent,
-    
   ],
   imports: [
     BrowserModule,
@@ -60,7 +60,7 @@ import { DeleteDialogComponent } from './componenti/delete-dialog/delete-dialog.
     FormsModule,
     ReactiveFormsModule,
     MatTableModule,
-
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,6 +6,6 @@
   }*/
   .example-container {
     position: relative;
-    height:100%;
+    height:auto;
     background: #eee;
   }

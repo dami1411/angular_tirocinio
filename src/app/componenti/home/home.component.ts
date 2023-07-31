@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
   ];*/
   adminActions = ['deleteAction','changeRole'];
   //displayColumns = ['id', 'username', 'email', 'password', 'editAction', 'deleteAction', 'role'];
-  displayColumns = ['id', 'username', 'email', 'password','role','editAction'];
+  displayColumns = ['username', 'email', 'password','role','editAction'];
   utenteLoggato = JSON.parse(sessionStorage.getItem('user') || "{}");
   constructor(private firebase: FirebaseService, public dialogEdit: MatDialog, public dialogDelete: MatDialog, private authService: AuthService) { }
 
@@ -53,6 +53,9 @@ export class HomeComponent implements OnInit {
 
     //this.router.navigate(['/login']);
     //this.url = this.firebase.getUrl();
+    this.dataSource.filterPredicate = function(record:Utenti, filter) {
+      return record.username.toLowerCase().includes(filter.toLowerCase());
+    }
     this.authService.checkSession();
     this.getUsers();
     this.firebase.getRoleByEmail(JSON.parse(sessionStorage.getItem('user') || '{}').email).subscribe((role) => {
@@ -144,5 +147,10 @@ export class HomeComponent implements OnInit {
       console.log(data);
     })
     //this.showForm = false;
+  }
+  
+  applyFilter(event:Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase(); 
   }
 }
