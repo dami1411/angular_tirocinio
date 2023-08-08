@@ -1,0 +1,22 @@
+
+
+<div *ngIf="products.length else elseBlock">
+<mat-grid-list cols=3   gutterSize="10px" class="myGridList" rowHeight="400px">
+    <mat-grid-list cols=3   gutterSize="10px" class="myGridList" >
+        <mat-grid-tile *ngFor="let p of products">
+          <app-poduct [prodotto] = p (productLikeClick)="eventLikeHandler($event)"></app-poduct>
+        </mat-grid-tile>
+        <!--<mat-grid-tile style="background-color:red">2</mat-grid-tile>
+        <mat-grid-tile style="background-color:red">3</mat-grid-tile>
+        <mat-grid-tile style="background-color:red">4</mat-grid-tile>-->
+      </mat-grid-list>
+</mat-grid-list>
+</div>
+<ng-template #elseBlock>
+  <div class="main_content_col">
+  <div class="stand_img" style="background-image: url('../../../assets/img/empty_wish_list.png');"></div>
+  <h2 style="margin: 0;">Ancora nessun prodotto presente nella tua lista desideri.</h2>
+</div>
+</ng-template>
+
+

@@ -6,6 +6,15 @@
   }*/
   .example-container {
     position: relative;
-    height:auto;
-    background: #eee;
+    height:90%;
+    
+    
   }
+  .active span{
+     color: orangered;
+  }
+  .mat-drawer-backdrop .ng-star-inserted{
+    height:100%;
+    overflow: hidden;
+  }
+  

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, of } from 'rxjs';
+import { Observable, Subject, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -84,11 +84,20 @@ export class FirebaseService {
   getRoleByEmail(email: any) : Observable<string> {
     return !!email ? this.getUserByEmail(email).pipe(map(user => user?.role || 'guest')) : of('no-user')
   }
-
+  /*getRoleIsAdmin(email:any) {
+    var subject = new Subject<boolean>();
+    this.getRoleByEmail(email)
+    .subscribe( (role) => {
+      subject.next(role.toLowerCase() === 'admin');
+    })
+    return subject.asObservable();
+  }*/
   getUsernameByEmail(email: any) : Observable<string> {
     return this.getUserByEmail(email).pipe(map(user => user.username));
   }
-
+  getUserKeyByEmail(email:any) : Observable<string> {
+    return this.getUserByEmail(email).pipe(map(user => user.id ))
+  }
   getUserByEmail(email: string): Observable<any> {
     /*let url = this.url;
     url += this.addTableToUrl('utenti');

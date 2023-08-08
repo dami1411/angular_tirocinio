@@ -1,16 +1,9 @@
-export class Prodotti {
+export interface Prodotti {
     
-    constructor(private id:number, private title:string, private description:string){}
-    getProductId(){
-        return this.id;
-    }
-
-    getProductTitle(){
-        return this.title;
-    }
-
-    getProductDescription(){
-        return this.description;
-    }
-
+    id:string, 
+    title:string, 
+    description:string,
+    imgSrc:string,
+    price:number
+    
 }

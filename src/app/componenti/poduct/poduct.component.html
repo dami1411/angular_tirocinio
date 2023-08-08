@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-title>
+    <!--<a  routerLink="./{{prodotto.title}}">{{prodotto.title}}</a>-->
+    <a style="cursor:pointer" (click)="onClickTitle(prodotto)">{{prodotto.title}}</a>
+  </mat-card-title>
+  <mat-card-header mat-card-content style="background-image: url({{prodotto.imgSrc}})" class="content"></mat-card-header>
+  <mat-card-content class="content" >
+    <p>{{prodotto.description}}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button type="button" (click)="onClickLike(prodotto)"><mat-icon [ngStyle]="{'color': like ? 'red' : 'black' }">{{like ? 'favorite' : 'favorite_border'}}</mat-icon></button>
+  </mat-card-actions>
+  <mat-card-footer>
+    {{prodotto.price | currency: 'EUR' :'symbol'}}
+  </mat-card-footer>
+</mat-card>
+
+

@@ -1,4 +1,4 @@
-<form [formGroup]="userForm" (ngSubmit)="onSubmitEdit()" class="col_center">
+<form [formGroup]="userForm" (ngSubmit)="onSubmitEdit()" class="col_center" *ngIf="data.type.toLowerCase() == 'Add'.toLowerCase()">
   <h2>{{data.type}}</h2>
   <mat-form-field>
     <mat-label>Username</mat-label>
@@ -21,4 +21,25 @@
   </mat-form-field> 
   <button mat-raised-button color="primary" type="submit" [disabled]="!userForm.valid">{{data.type}}</button>
   <!--<button mat-raised-button color="warn" (click)="showForm = false">undo</button>-->
+</form>
+
+<form class="col_center" [formGroup]="prodForm" (ngSubmit)="onSubmitEdit()" *ngIf="data.type.toLowerCase() === 'addProduct'.toLowerCase() || data.type.toLowerCase() === 'EditProduct'.toLowerCase()" >
+  <h2>{{data.type}}</h2>
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput name="title" formControlName="title">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input matInput name="description" formControlName="description">
+  </mat-form-field>
+  <mat-form-field>  
+    <mat-label>Image link</mat-label>
+    <input matInput type="text" name="imgSrc" formControlName="imgSrc">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Price</mat-label>
+    <input matInput type="number" name="price" formControlName="price">
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit" [disabled]="!prodForm.valid">{{data.type}}</button>
 </form>

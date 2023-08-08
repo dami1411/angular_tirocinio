@@ -22,7 +22,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
- 
+import {MatGridListModule} from '@angular/material/grid-list'; 
+import {MatCardModule} from '@angular/material/card';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -30,6 +31,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { EditDialogComponent } from './componenti/edit-dialog/edit-dialog.component';
 import { DeleteDialogComponent } from './componenti/delete-dialog/delete-dialog.component';
+import { UserSettingsComponent } from './componenti/user-settings/user-settings.component';
+import { NotFoundComponent } from './componenti/not-found/not-found.component';
+import { UserManagementComponent } from './componenti/user-management/user-management.component';
+import { CourtesyPageComponent } from './componenti/courtesy-page/courtesy-page.component';
+import { PoductComponent } from './componenti/poduct/poduct.component';
+import { WishListComponent } from './componenti/wish-list/wish-list.component';
 
 
 @NgModule({
@@ -42,6 +49,12 @@ import { DeleteDialogComponent } from './componenti/delete-dialog/delete-dialog.
     RegisterComponent,
     EditDialogComponent,
     DeleteDialogComponent,
+    UserSettingsComponent,
+    NotFoundComponent,
+    UserManagementComponent,
+    CourtesyPageComponent,
+    PoductComponent,
+    WishListComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +73,9 @@ import { DeleteDialogComponent } from './componenti/delete-dialog/delete-dialog.
     FormsModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatGridListModule,
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -8,7 +8,7 @@
   <input matInput name="search" (keyup)="applyFilter($event)">
 </mat-form-field>
 </div>-->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" #tabella>
+<!--<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" #tabella>-->
 
   <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
@@ -26,65 +26,113 @@
   </ng-container>-->
   <!--<div *ngIf="showInput">ciao</div>-->
   <!-- Username Column -->
-  <ng-container matColumnDef="username">
-    <th mat-header-cell *matHeaderCellDef>
-      <div>  
-      <mat-form-field>
-        <mat-label>Search</mat-label>
-        <input matInput name="search" (keyup)="applyFilter($event)">
-      </mat-form-field>
+  <!--<ng-container matColumnDef="username">
+    <th mat-header-cell *matHeaderCellDef>-->
+     
+      
+      <div *ngIf="!isDetail else detailBlock">
+        <div>  
+          <mat-form-field>
+            <mat-label>Search</mat-label>
+            <input matInput name="search" (keyup) = "filterProds($event)">
+          </mat-form-field>
+          </div>
+      <mat-grid-list cols=3   gutterSize="10px" class="myGridList" >
+        <mat-grid-tile *ngFor="let p of filteredProds">
+          <!--<app-poduct [prodotto] = p (productDetailClick)="onDetailClickHandler($event)"></app-poduct>-->
+          <app-poduct [prodotto] = "p" (click)="onClickProd(p.title)"></app-poduct>
+          <button *ngIf="role.toLowerCase() === 'admin'.toLowerCase()" mat-mini-fab (click)="onClickEdit({id:'',username:'',email:'',password:'',role:''},p,'editProduct')">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button *ngIf="role.toLowerCase() === 'admin'.toLowerCase()" mat-mini-fab (click)="onClickDelete(p)"> 
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-grid-tile>
+        <!--<mat-grid-tile style="background-color:red">2</mat-grid-tile>
+        <mat-grid-tile style="background-color:red">3</mat-grid-tile>
+        <mat-grid-tile style="background-color:red">4</mat-grid-tile>-->
+      </mat-grid-list>
+      <button mat-raised-button color="primary" *ngIf="role === 'admin'"
+      (click)="onClickAdd({id:'',username:'',email:'',password:'',role:''},{id:'',title:'',description:'',imgSrc:'',price: 0.0},'addProduct')">Add</button>
+
       </div>
-    </th>
-    <td mat-cell *matCellDef="let element"> {{element.username}} </td>
-  </ng-container>
+      <ng-template #detailBlock>
+         
+        <div class="main_content_col" style="text-align: left;"  *ngIf="detailProd">
+          <div>
+            <button mat-button (click)="goToHome()">
+              <mat-icon>arrow_back_ios_new</mat-icon>
+            </button>
+          </div> 
+          <div class="main_content_row">
+            <div class="content" style="background-image: url('{{detailProd.imgSrc}}')">
+              <!--<img  src="{{detailProd.imgSrc}}" alt="img">-->
+            </div>
+            <div class="content">
+              <h1 style="text-transform:uppercase">{{detailProd.title}}</h1>
+                <h2 style="margin:0">Descrizione</h2>
+                <p><i>{{detailProd.description}}</i></p>
+                <h2 style="margin:0">Prezzo</h2>
+                <p>{{detailProd.price | currency: 'EUR' : 'symbol'}} </p>
+                <mat-card-actions>
+                  <button mat-button type="button" (click)="onClickLike(detailProd)"><mat-icon [ngStyle]="{'color': like ? 'red' : 'black' }">{{like ? 'favorite' : 'favorite_border'}}</mat-icon></button>
+                </mat-card-actions>
+            </div>
+         </div>
+         
+         </div> 
+      </ng-template>
+    <!--</th>
+    <td mat-cell *matellDef="let element"> {{element.username}} </td>
+  </ng-container>-->
 
   <!-- Email Column -->
-  <ng-container matColumnDef="email">
+  <!--<ng-container matColumnDef="email">
     <th mat-header-cell *matHeaderCellDef> Email </th>
     <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-  </ng-container>
+  </ng-container>-->
 
   <!-- Password Column -->
-  <ng-container matColumnDef="password">
+  <!--<ng-container matColumnDef="password">
     <th mat-header-cell *matHeaderCellDef> Password </th>
     <td mat-cell *matCellDef="let element"> {{element.password}} </td>
   </ng-container>
   <ng-container matColumnDef="role">
     <th mat-header-cell *matHeaderCellDef> Role </th>
     <td mat-cell *matCellDef="let element"> {{element.role || 'guest'}} </td>
-  </ng-container>
+  </ng-container>-->
   <!-- Edit Column -->
-  <ng-container matColumnDef="editAction">
+  <!--<ng-container matColumnDef="editAction">
     <th mat-header-cell *matHeaderCellDef> </th>
-    <td mat-cell *matCellDef="let element">
-      <button mat-mini-fab (click)="onClickEdit(element,'Edit')">
+    <td mat-cell *matCellDef="let element">-->
+      
+      <!--<button mat-mini-fab (click)="onClickEdit({id:'',username:'',email:'',password:'',role:''},p,'editProduct')"> //(click)="onClickEdit(element,'Edit')"
         <mat-icon>edit</mat-icon>
-      </button>
-    </td>
-  </ng-container>
+      </button>-->
+    <!--</td>
+  </ng-container>-->
   <!--Delete Column-->
-  <ng-container matColumnDef="deleteAction">
+  <!--<ng-container matColumnDef="deleteAction">
     <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let element">
-      <button mat-mini-fab (click)="onClickDelete(element)">
+    <td mat-cell *matCellDef="let element">-->
+      <!--<button mat-mini-fab (click)="onClickDelete(p)"> (click)="onClickDelete(p)"
         <mat-icon>delete</mat-icon>
-      </button>
-    </td>
-  </ng-container>
+      </button>-->
+    <!--</td>
+  </ng-container>-->
 
-  <ng-container matColumnDef="changeRole">
+  <!--<ng-container matColumnDef="changeRole">
     <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let element">
-      <button mat-mini-fab (click)="onClickEdit(element,'ChangeRole')">
+    <td mat-cell *matCellDef="let element">-->
+      <!--<button mat-mini-fab > (click)="onClickEdit(element,'ChangeRole')"
         <mat-icon>supervised_user_circle</mat-icon>
-      </button>
-    </td>
+      </button>-->
+    <!--</td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
   <tr mat-row *matRowDef="let row;columns: displayColumns;" (click)="onClickRow(row)"></tr>
-</table>
-<button mat-raised-button color="primary" *ngIf="role === 'admin'"
-  (click)="onClickAdd({id:'',username:'',email:'',password:'',role:''},'Add')">Add</button>
+</table>-->
+
 <!--<form [formGroup]="userForm" (ngSubmit)="onSubmitEdit()" *ngIf="showForm">
     
     <mat-form-field>
@@ -102,3 +150,4 @@
       <button mat-raised-button color="primary" type="submit" [disabled]="!userForm.valid">change</button>
       <button mat-raised-button color="warn" (click)="showForm = false">undo</button>
 </form>-->
+<router-outlet></router-outlet>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
+import { FirebaseService } from 'src/app/servizi/firebase.service';
 
 @Component({
   selector: 'app-header',
@@ -10,11 +11,12 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class HeaderComponent implements OnInit {
   logged = false;
   username!:string;
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router,private firebase:FirebaseService) { }
   ngOnInit(): void {
     //this.logged = sessionStorage.getItem('user')!= undefined;
     this.logged = this.authService.isAuthenticated();
     this.username = JSON.parse(sessionStorage.getItem('user') || '{}').username;
+    
     console.log(this.username);
   }
   onLogOut() {

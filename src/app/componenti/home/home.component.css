@@ -1,0 +1,26 @@
+:host{
+    width:90%;
+    height: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.main_content_col{
+    display: flex;
+    flex-direction: column;
+}
+.main_content_row{
+    display: flex;
+}
+
+.content{
+    
+    width:50%;
+    height:auto;
+    max-height:100%;
+    min-height: 100%;
+    background-size:contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}

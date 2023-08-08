@@ -14,4 +14,25 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     width: 100%;
   }
 
+  .main_content_col{
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    max-height: 100%;
+    height:auto;
+    margin:12.5% 0;
+    min-height: 25%;
+    text-align: center;
+}
+
+.stand_img{
+    
+    width:100%;
+    max-height:100%;
+    min-height: 200px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
   

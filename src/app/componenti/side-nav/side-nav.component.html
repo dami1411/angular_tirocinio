@@ -1,12 +1,13 @@
 <mat-sidenav-container class="example-container">
   <mat-sidenav mode="side" opened >
     <mat-list role="list">
-      <mat-list-item role="listitem" routerLink="home">Home</mat-list-item>
-      <mat-list-item role="listitem">Pagina 1</mat-list-item>
-      <mat-list-item role="listitem">Pagina 2</mat-list-item>
+      <mat-list-item role="listitem" routerLink="home" [routerLinkActive]="'active'"><span>Home</span></mat-list-item>
+      <mat-list-item role="listitem" routerLink="/wishList" [routerLinkActive]="'active'"><span>WishList</span></mat-list-item>
+      <mat-list-item role="listitem" routerLink="/user_settings" [routerLinkActive]="'active'"><span>Impostazioni Utente</span></mat-list-item>
+      <mat-list-item role="listitem" routerLink="/user_management" [routerLinkActive]="'active'"><span>Users management</span></mat-list-item>
     </mat-list>
   </mat-sidenav>
-  <mat-sidenav-content>
+  <mat-sidenav-content class="content" style="height:100%">
     <router-outlet>
 
     </router-outlet>
