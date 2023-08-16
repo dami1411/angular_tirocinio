@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { map } from 'rxjs';
+import { flatMap, map, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Prodotti } from 'src/app/modelli/prodotti.model';
 import { WishList } from 'src/app/modelli/wish-list.model';
@@ -21,22 +21,22 @@ export class WishListComponent implements OnInit{
   ngOnInit(): void {
     this.authService.checkSession();
     this.getWishListProds();
-    
-    
+     
+        
   }
   
   getProdsOfUser(keyProdUser:string[]) {
-    this.prodService.getProdotti().subscribe((data:any) => {
+    return this.prodService.getProdotti().pipe(map((data:any) => {
       for(let keyUser of keyProdUser){
       
         data[keyUser].id = keyUser;
         this.products.push({id: data[keyUser].id, title: data[keyUser].title,description: data[keyUser].description, imgSrc: data[keyUser].imgSrc, price: data[keyUser].price})
-      }  
-    });
+      }
+      return this.products;  
+    }));
    }
-   getWishListProds(){
-    
-    this.wishListService.getProdottiWishList().subscribe((data:any)=> {
+   /*getWishListProds(){
+     this.wishListService.getProdottiWishList().subscribe((data:any)=> {
       Object.keys(data).map((key) => {
         this.wishList.push({id:key,email:data[key].email,productKey:data[key].productKey});
       })
@@ -48,14 +48,29 @@ export class WishListComponent implements OnInit{
       //console.log(this.products);
     });
    
-  }
+  }*/
+  getWishListProds(){
+    this.wishListService.getProdottiWishListByEmail(JSON.parse(sessionStorage.getItem('user') || '{}').email).pipe(switchMap((data:any)=> {
+     Object.keys(data).map((key) => {
+       this.wishList.push({id:key,email:data[key].email,productKey:data[key].productKey});
+     })
+     
+     let userProdKeys = this.getUserProdKey(this.wishList);
+    
+     return this.getProdsOfUser(userProdKeys);
+     //this.products = [];
+     
+     //console.log(this.products);
+   })).subscribe((data) => {
+    this.products = data;
+   } );
+  
+ }
 
-  getUserProdKey(email:string,wishList:WishList[]):string[] {
-    let prodUser = wishList.filter((item) => {
-      return  item.email === email;
-    });
+  getUserProdKey(wishList:WishList[]):string[] {
+    
     let prodkeyUser:string[] = [];
-    prodUser.map((item)=> {
+    wishList.map((item)=> {
        prodkeyUser.push(item.productKey)
     })
     return prodkeyUser;
@@ -64,5 +79,6 @@ export class WishListComponent implements OnInit{
     let index = this.products.indexOf(res);
     if(index > -1)
       this.products.splice(index,1);
-  } 
+  }
+ 
 }

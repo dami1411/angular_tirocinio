@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { HttpClient } from '@angular/common/http';
 import { Prodotti } from '../modelli/prodotti.model';
-import { Observable, find, map, of } from 'rxjs';
+import { Observable, find, map, of, switchMap } from 'rxjs';
 import { WishList } from '../modelli/wish-list.model';
 
 @Injectable({
@@ -29,6 +29,15 @@ export class WishListServiceService {
     //console.log(url);
     url += this.firebase.addTableToUrl('wishList');
     url += this.firebase.addAuthToUrl(JSON.parse(sessionStorage.getItem('user') || '{}').idToken);
+    console.log(url);
+    return this.httpService.get(url);
+  }
+  getProdottiWishListByEmail(email:string) {
+    let url =  this.url;
+    url += this.firebase.addTableToUrl('wishList');
+    url += this.firebase.addAuthToUrl(JSON.parse(sessionStorage.getItem('user') || '{}').idToken);
+    url += this.firebase.addOrderBy('email');
+    url += this.firebase.addEqualTo(email);
     console.log(url);
     return this.httpService.get(url);
   }
@@ -85,7 +94,7 @@ export class WishListServiceService {
     return this.like;
   }*/
 
-  onClickLike(product:Prodotti,like:boolean):Observable<boolean>{
+  /*onClickLike(product:Prodotti,like:boolean):Observable<boolean>{
     let userEmail = (JSON.parse(sessionStorage.getItem('user') || '{}').email);
       let productKey = product.id;
       if(like === false) {
@@ -106,6 +115,40 @@ export class WishListServiceService {
              
             });
         })
+        return of(false);
+      }
+      
+      return of(false);   
+      /*this.checkIfLikeIsPresent(product,userEmail).subscribe((data) => {
+         like = data;
+         
+          })
+            
+      })*/
+
+   /*   
+   }*/
+   onClickLike(product:Prodotti,like:boolean):Observable<boolean>{
+    let userEmail = (JSON.parse(sessionStorage.getItem('user') || '{}').email);
+      let productKey = product.id;
+      if(like === false) {
+            this.insertProductWishList(JSON.parse(sessionStorage.getItem('user') || '{}').idToken,{
+            email: userEmail,
+            productKey: productKey
+          }).subscribe((data:any) => {
+            console.log(data);
+           
+          })
+          return of(true)
+        }
+         if(like === true) {
+          this.getPrimaryKey(product,userEmail).pipe(switchMap((primaryKey:any) => {
+               console.log(primaryKey);
+            return this.deleteProdottoWishList(primaryKey)
+        })).subscribe((data:any)=>{
+          console.log(data);
+         
+        });
         return of(false);
       }
       

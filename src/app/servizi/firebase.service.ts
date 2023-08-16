@@ -33,6 +33,14 @@ export class FirebaseService {
   /*getUrlForDelete() {
     return this.urlForDelete;
   }*/
+  addOrderBy(field:string) {
+    return `&orderBy="${field}"`
+  }
+
+  addEqualTo(value:string) {
+    return `&equalTo="${value}"`
+  }
+
   insertUtente(idToken: string, body: {}) {
     let url = this.url;
     console.log(url);

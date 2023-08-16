@@ -58,7 +58,7 @@ export class PoductComponent implements OnInit {
    let likeProd = this.like;
    this.wishListService.onClickLike(product,likeProd).subscribe((likeVal) => {
     this.like = likeVal;
-    this.wishListService.getProdottiWishList()
+    //this.wishListService.getProdottiWishList()
     this.productLikeClick.emit(product);
     /*this.wishListService.getProdottiWishList().subscribe((data) => {
       console.log(data);
